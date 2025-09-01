@@ -53,34 +53,34 @@ class TestFrete:
         with pytest.raises(TypeError):
             gerar_frete(peso, distancia, opcao)
 
-class TestFretePorCEP:#
-    def test_calcular_frete_por_cep(self, monkeypatch):#
-        res_cep = [#
-            (-22.55, -46.66),#
-            (-22.98, -43.19),#
-        ]#
+class TestFretePorCEP:
+    def test_calcular_frete_por_cep(self, monkeypatch):
+        res_cep = [
+            (-22.55, -46.66),
+            (-22.98, -43.19),
+        ]
 
-        def coordenadas_cep_fake(cep):#
-            return res_cep.pop(0)#
+        def coordenadas_cep_fake(cep):
+            return res_cep.pop(0)
 
-        monkeypatch.setattr("src.main.coordenadas_cep", coordenadas_cep_fake)#
-        monkeypatch.setattr(#
-            "src.main.calcular_distancia_coordenada",#
-            lambda *args, **kwargs: 500.0#
-        )#
+        monkeypatch.setattr("src.main.coordenadas_cep", coordenadas_cep_fake)
+        monkeypatch.setattr(
+            "src.main.calcular_distancia_coordenada",
+            lambda *args, **kwargs: 500.0
+        )
 
-        res = calcular_frete_por_cep("01000-000", "20000-000", 2.0, 1)#
+        res = calcular_frete_por_cep("01000-000", "20000-000", 2.0, 1)
 
-        assert res == "O valor do frete é 1005.00"#
+        assert res == "O valor do frete é 1005.00"
 
-    def test_calcular_frete_por_cep_invalido(self, monkeypatch):#
-        msg_erro = "CEP 99999-999 não encontrado."#
+    def test_calcular_frete_por_cep_invalido(self, monkeypatch):
+        msg_erro = "CEP 99999-999 não encontrado."
 
-        def cep_fake(*args, **kwargs):#
-            raise ValueError(msg_erro)#
+        def cep_fake(*args, **kwargs):
+            raise ValueError(msg_erro)
         
         monkeypatch.setattr("src.main.coordenadas_cep", cep_fake)
 
-        res = calcular_frete_por_cep("01000-000", "99999-999", 10, 1)#
+        res = calcular_frete_por_cep("01000-000", "99999-999", 10, 1)
 
-        assert f"Ocorreu um erro: {msg_erro}" in res#
+        assert f"Ocorreu um erro: {msg_erro}" in res
